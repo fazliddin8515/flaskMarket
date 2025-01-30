@@ -1,12 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def home_page():
-    return "Hello, World!"
-
-@app.route("/<username>")
-def about_page(username):
-    return f"This is {username}'s profile"
+    return render_template("home.html")
