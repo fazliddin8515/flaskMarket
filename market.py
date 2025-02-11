@@ -21,6 +21,9 @@ class Item(db.Model):  # type: ignore
     barcode: Mapped[int] = mapped_column(nullable=False, unique=True)
     price: Mapped[int] = mapped_column(nullable=False)
 
+    def __repr__(self):
+        return f"<Item (name: {self.name}, price: {self.price})>"
+
 
 with app.app_context():
     db.create_all()
@@ -34,10 +37,8 @@ def home_page():
 
 @app.route("/market")
 def market_page():
-    items = [
-        {"id": 1, "name": "Phone", "barcode": "893212299897", "price": 500},
-        {"id": 2, "name": "Laptop", "barcode": "123985473165", "price": 900},
-        {"id": 3, "name": "Keyboard", "barcode": "231985128446", "price": 150},
-        {"id": 4, "name": "Strawbar", "barcode": "3259235345569", "price": 20},
-    ]
+    select_stmt = db.select(Item)
+    result = db.session.execute(select_stmt)
+    items = result.scalars().all()
+    print(items)
     return render_template("market.html", items=items)
