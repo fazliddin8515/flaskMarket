@@ -16,3 +16,8 @@ def market_page():
     items = result.scalars().all()
     print(items)
     return render_template("market.html", items=items)
+
+
+@app.route("/register")
+def register_page():
+    return render_template("register.html")
