@@ -10,6 +10,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(nullable=False, unique=True)
     email_address: Mapped[str] = mapped_column(nullable=False, unique=True)
     password_hash: Mapped[str] = mapped_column(nullable=False)
+    balance: Mapped[int] = mapped_column(nullable=False, default=1000)
     items: Mapped[list["Item"]] = relationship(back_populates="user")
 
     def __repr__(self):

@@ -11,6 +11,7 @@ db = SQLAlchemy(model_class=Base)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///market.sqlite"
+app.config["SECRET_KEY"] = "HM28nbz3MQ16DW6289UieJ5kZwNXJcGb"
 
 db.init_app(app)
 
