@@ -1,6 +1,7 @@
 from market import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
+from market import bcrypt
 
 
 class User(Base):
@@ -15,6 +16,16 @@ class User(Base):
 
     def __repr__(self):
         return f"<User (username: {self.username}, email: {self.email_address})>"
+
+    @property
+    def password(self):
+        return self.password
+
+    @password.setter
+    def password(self, text_password):
+        self.password_hash = bcrypt.generate_password_hash(text_password).decode(
+            "utf-8"
+        )
 
 
 class Item(Base):
