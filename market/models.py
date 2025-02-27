@@ -1,10 +1,17 @@
 from market import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey
-from market import bcrypt
+from sqlalchemy import ForeignKey, select
+from market import bcrypt, login_manager, db
+from flask_login import UserMixin  # type: ignore
 
 
-class User(Base):
+@login_manager.user_loader
+def load_user(user_id):
+    stmt = select(User).where(User.id == user_id)
+    return db.session.execute(stmt).scalars().first()
+
+
+class User(Base, UserMixin):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -16,6 +23,9 @@ class User(Base):
 
     def __repr__(self):
         return f"<User (username: {self.username}, email: {self.email_address})>"
+
+    def check_password(self, text_password):
+        return bcrypt.check_password_hash(self.password_hash, text_password)
 
     @property
     def password(self):
